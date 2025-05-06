@@ -1,0 +1,49 @@
+.movie-list {
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2.2rem;
+  padding: 2rem 1rem;
+  justify-items: center;
+}
+
+.pagination {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.pagination button {
+  margin: 0 6px;
+  padding: 10px 16px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.pagination button.active {
+  background-color: #ff395c;
+  font-weight: bold;
+}
+
+.pagination button:hover {
+  background-color: #555;
+}
+
+.pagination .dots {
+  color: #aaa;
+  padding: 6px;
+}
+
+.search-summary {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
