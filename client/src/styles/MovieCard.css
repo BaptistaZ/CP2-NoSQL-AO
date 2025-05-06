@@ -99,3 +99,20 @@
 .favorite-button:hover {
   color: gold;
 }
+
+.favorite-button {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.favorite-button:hover {
+  background: white;
+  color: black;
+}

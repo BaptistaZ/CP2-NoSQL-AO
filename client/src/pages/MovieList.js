@@ -8,6 +8,7 @@ const MovieList = ({
   searchQuery = "",
   selectedGenre = "",
   showFavorites = "",
+  logoutTrigger = false, // <- NOVO: recebe o trigger de logout
 }) => {
   const [movies, setMovies] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -23,9 +24,16 @@ const MovieList = ({
 
       try {
         if (showFavorites) {
-          const favIds = JSON.parse(localStorage.getItem("favorites")) || [];
+          const storedUser = JSON.parse(localStorage.getItem("user"));
+          if (!storedUser) {
+            setMovies([]); // mostrar nada
+            setTotalPages(1);
+            return;
+          }
 
-          // Buscar filmes por ID (podemos melhorar no backend com rota /movies/byIds)
+          const favKey = `favorites_${storedUser.id}`;
+          const favIds = JSON.parse(localStorage.getItem(favKey)) || [];
+
           const promises = favIds.map((id) => api.get(`/movies/${id}`));
           const results = await Promise.all(promises);
           const favMovies = results.map((res) => res.data);
@@ -51,7 +59,7 @@ const MovieList = ({
     };
 
     fetchMovies();
-  }, [currentPage, searchQuery, selectedGenre, showFavorites]);
+  }, [currentPage, searchQuery, selectedGenre, showFavorites, logoutTrigger]); // <- Trigger incluído aqui
 
   // Reset à página quando filtros mudam
   useEffect(() => {

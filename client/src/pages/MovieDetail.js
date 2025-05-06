@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import api from '../services/api';
-import '../styles/MovieDetail.css';
+import React, { useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import api from "../services/api";
+import FavoriteButton from "../components/FavoriteButton";
+import "../styles/MovieDetail.css";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -9,7 +10,7 @@ const MovieDetail = () => {
 
   const [movie, setMovie] = useState(null);
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const MovieDetail = () => {
       }
     };
 
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
 
     fetchMovie();
@@ -43,27 +44,28 @@ const MovieDetail = () => {
     if (!newComment.trim()) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       await api.post(
-        '/comments',
+        "/comments",
         { movieId: id, text: newComment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setNewComment('');
+      setNewComment("");
       const res = await api.get(`/comments/${id}`);
       setComments(res.data);
     } catch (err) {
-      alert('Erro ao enviar comentário. Faz login novamente.');
+      alert("Erro ao enviar comentário. Faz login novamente.");
     }
   };
 
-  if (!movie) return <p className="loading-text">A carregar detalhes do filme...</p>;
+  if (!movie)
+    return <p className="loading-text">A carregar detalhes do filme...</p>;
 
-  const posterUrl = movie.poster || 'https://via.placeholder.com/300x450?text=No+Image';
+  const posterUrl =
+    movie.poster || "https://via.placeholder.com/300x450?text=No+Image";
 
   return (
     <div className="movie-detail">
-
       {/* 🔙 Botão de Voltar */}
       <button className="back-button" onClick={() => history.goBack()}>
         ← Voltar
@@ -73,28 +75,36 @@ const MovieDetail = () => {
 
       <div className="movie-info-vertical">
         <h1 className="movie-title">{movie.title}</h1>
-
+        <div className="favorite-container">
+          <FavoriteButton movieId={movie._id} />
+        </div>
         <div className="genres">
           {movie.genres?.map((genre, index) => (
-            <span key={index} className="genre-chip">{genre}</span>
+            <span key={index} className="genre-chip">
+              {genre}
+            </span>
           ))}
         </div>
 
         <div className="movie-meta">
-          <p><strong>⭐ IMDB:</strong> {movie.imdb?.rating || 'N/A'}/10 &nbsp;|&nbsp;
+          <p>
+            <strong>⭐ IMDB:</strong> {movie.imdb?.rating || "N/A"}/10
+            &nbsp;|&nbsp;
             <strong>🗳️</strong> {movie.imdb?.votes || 0} votos
           </p>
-          <p><strong>⏱️ Duração:</strong> {movie.runtime || 'N/A'} minutos</p>
+          <p>
+            <strong>⏱️ Duração:</strong> {movie.runtime || "N/A"} minutos
+          </p>
         </div>
 
         <div className="movie-cast">
           <h3>🎭 Elenco</h3>
-          <p>{movie.cast?.join(', ') || 'Sem informação'}</p>
+          <p>{movie.cast?.join(", ") || "Sem informação"}</p>
         </div>
 
         <div className="movie-plot">
           <h3>📖 Sinopse</h3>
-          <p>{movie.plot || 'Sem sinopse disponível.'}</p>
+          <p>{movie.plot || "Sem sinopse disponível."}</p>
         </div>
 
         <div className="movie-comments">
@@ -117,7 +127,20 @@ const MovieDetail = () => {
             </form>
           ) : (
             <div className="comment-login-prompt">
-              <p>🔒 Para comentar, <span onClick={() => history.push('/login')} className="link">efetua login</span> ou <span onClick={() => history.push('/register')} className="link">regista-te</span>.</p>
+              <p>
+                🔒 Para comentar,{" "}
+                <span onClick={() => history.push("/login")} className="link">
+                  efetua login
+                </span>{" "}
+                ou{" "}
+                <span
+                  onClick={() => history.push("/register")}
+                  className="link"
+                >
+                  regista-te
+                </span>
+                .
+              </p>
             </div>
           )}
         </div>
