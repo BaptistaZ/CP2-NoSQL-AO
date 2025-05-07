@@ -15,12 +15,24 @@ const MovieDetail = () => {
   const [newComment, setNewComment] = useState("");
   const [user, setUser] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+  const [averageRating, setAverageRating] = useState(null);
+  const [userRating, setUserRating] = useState(0);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         const res = await api.get(`/movies/${id}`);
         setMovie(res.data);
+        const ratings = res.data.ratings || [];
+        if (ratings.length > 0) {
+          const avg =
+            ratings.reduce((sum, r) => sum + r.value, 0) / ratings.length;
+          setAverageRating(avg.toFixed(1));
+
+          const storedUser = JSON.parse(localStorage.getItem("user"));
+          const existing = ratings.find((r) => r.userId === storedUser?.id);
+          if (existing) setUserRating(existing.value);
+        }
       } catch (err) {
         console.error("Erro ao buscar detalhes:", err);
       }
@@ -87,6 +99,31 @@ const MovieDetail = () => {
     }
   };
 
+  const submitRating = async (value) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await api.post(
+        `/movies/${id}/rate`,
+        { value },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setMovie(res.data); // atualiza com os dados já retornados
+
+      const ratings = res.data.ratings || [];
+      if (ratings.length > 0) {
+        const avg =
+          ratings.reduce((sum, r) => sum + r.value, 0) / ratings.length;
+        setAverageRating(avg.toFixed(1));
+
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        const existing = ratings.find((r) => r.userId === storedUser?.id);
+        if (existing) setUserRating(existing.value);
+      }
+    } catch (err) {
+      alert("Erro ao avaliar. Faz login novamente.");
+    }
+  };
+
   if (!movie)
     return <p className="loading-text">A carregar detalhes do filme...</p>;
 
@@ -149,6 +186,39 @@ const MovieDetail = () => {
         <div className="movie-plot">
           <h3>📖 Sinopse</h3>
           <p>{movie.plot || "Sem sinopse disponível."}</p>
+        </div>
+        <div className="movie-rating">
+          <h3>🗳️ Avaliação</h3>
+          <p>
+            {averageRating
+              ? `Média: ${averageRating}/5 (${movie.ratings.length} avaliações)`
+              : "Ainda não foi avaliado."}
+          </p>
+          {user ? (
+            <div className="rating-stars">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  className={`star ${star <= userRating ? "filled" : ""}`}
+                  onClick={() => submitRating(star)}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="comment-login-prompt">
+              🔒 Para avaliar,{" "}
+              <span onClick={() => history.push("/login")} className="link">
+                efetua login
+              </span>{" "}
+              ou{" "}
+              <span onClick={() => history.push("/register")} className="link">
+                regista-te
+              </span>
+              .
+            </p>
+          )}
         </div>
 
         <div className="movie-comments">

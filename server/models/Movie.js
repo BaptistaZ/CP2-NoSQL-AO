@@ -1,6 +1,33 @@
 // models/Movie.js
 const mongoose = require('mongoose');
 
-const movieSchema = new mongoose.Schema({}, { strict: false }); // permite qualquer campo
+const ratingSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
+  value: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
+  },
+});
 
-module.exports = mongoose.model('Movie', movieSchema, 'movies'); // 👈 nome da coleção é 'movies'
+const movieSchema = new mongoose.Schema({
+  // outros campos podem continuar livres
+  title: String,
+  poster: String,
+  year: String,
+  genres: [String],
+  plot: String,
+  cast: [String],
+  runtime: Number,
+  imdb: {
+    rating: Number,
+    votes: Number,
+  },
+  ratings: [ratingSchema], 
+}, { strict: false });
+
+module.exports = mongoose.model('Movie', movieSchema, 'movies');

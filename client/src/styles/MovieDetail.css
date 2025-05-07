@@ -171,3 +171,23 @@
   flex: 0 0 auto;
   width: 250px;
 }
+
+.rating-stars {
+  font-size: 1.8rem;
+  color: #ccc;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  margin: 0.5rem 0;
+}
+
+.rating-stars .star.filled {
+  color: gold;
+}
+
+.rating-stars .star:hover {
+  transform: scale(1.2);
+  transition: transform 0.2s;
+}
+

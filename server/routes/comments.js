@@ -1,23 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Comment = require('../models/Comment');
-const authMiddleware = require('../middlewares/authMiddleware');
+const Comment = require("../models/Comment");
+const verifyToken = require("../middlewares/authMiddleware");
 
-// GET: obter comentários por filme
-router.get('/:movieId', async (req, res) => {
+router.get("/:movieId", async (req, res) => {
   try {
-    const comments = await Comment.find({ movieId: req.params.movieId }).sort({ createdAt: -1 });
+    const comments = await Comment.find({ movieId: req.params.movieId }).sort({
+      createdAt: -1,
+    });
     res.json(comments);
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao buscar comentários' });
+    res.status(500).json({ message: "Erro ao buscar comentários" });
   }
 });
 
-// POST: criar novo comentário
-router.post('/', authMiddleware, async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   const { movieId, text } = req.body;
 
-  if (!text) return res.status(400).json({ message: 'Comentário vazio!' });
+  if (!text) return res.status(400).json({ message: "Comentário vazio!" });
 
   try {
     const newComment = new Comment({
@@ -30,7 +30,7 @@ router.post('/', authMiddleware, async (req, res) => {
     await newComment.save();
     res.status(201).json(newComment);
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao criar comentário' });
+    res.status(500).json({ message: "Erro ao criar comentário" });
   }
 });
 

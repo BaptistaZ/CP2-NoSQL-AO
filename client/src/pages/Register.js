@@ -18,7 +18,7 @@ const Register = () => {
 
     try {
       await api.post("/auth/register", form);
-      history.push("/login"); // ✅ Redireciona para login
+      history.push("/login"); 
     } catch (err) {
       setError(err.response?.data?.message || "Erro no registo");
     }

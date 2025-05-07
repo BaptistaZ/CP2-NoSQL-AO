@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -27,7 +26,6 @@ mongoose.connect(MONGO_URI, {
   console.error('❌ MongoDB connection error:', err.message);
 });
 
-// ✅ Liga as rotas
 app.use('/api/movies', movieRoutes);
 app.use('/api/auth', authRoutes); 
 app.use('/api/comments', commentRoutes);

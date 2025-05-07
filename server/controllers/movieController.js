@@ -1,26 +1,17 @@
-// controllers/movieController.js
-const mongoose = require('mongoose'); 
-const Movie = require('../models/Movie');
+const mongoose = require("mongoose");
+const Movie = require("../models/Movie");
 
 const getMovies = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const search = req.query.search || '';
-  const genre = req.query.genre || '';
+  const search = req.query.search || "";
+  const genre = req.query.genre || "";
 
   const skip = (page - 1) * limit;
-
   const filter = {};
 
-  // 🔍 Pesquisa por título (ou outros campos se quiseres)
-  if (search) {
-    filter.title = { $regex: new RegExp(search, 'i') };
-  }
-
-  // 🎭 Filtrar por género
-  if (genre) {
-    filter.genres = genre;
-  }
+  if (search) filter.title = { $regex: new RegExp(search, "i") };
+  if (genre) filter.genres = genre;
 
   try {
     const total = await Movie.countDocuments(filter);
@@ -30,7 +21,7 @@ const getMovies = async (req, res) => {
       total,
       page,
       totalPages: Math.ceil(total / limit),
-      movies
+      movies,
     });
   } catch (error) {
     console.error("Erro no getMovies:", error);
@@ -43,16 +34,17 @@ const getMovieById = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'ID inválido' });
+      return res.status(400).json({ message: "ID inválido" });
     }
 
     const movie = await Movie.findById(id);
-    if (!movie) return res.status(404).json({ message: 'Movie not found' });
+    if (!movie) return res.status(404).json({ message: "Movie not found" });
 
-    const Comment = mongoose.connection.collection('comments');
+    const Comment = mongoose.connection.collection("comments");
 
-    // 👇 Converte o ID para ObjectId antes de fazer a query
-    const comments = await Comment.find({ movie_id: new mongoose.Types.ObjectId(id) }).toArray();
+    const comments = await Comment.find({
+      movie_id: new mongoose.Types.ObjectId(id),
+    }).toArray();
 
     res.json({ ...movie.toObject(), comments });
   } catch (error) {
@@ -61,8 +53,36 @@ const getMovieById = async (req, res) => {
   }
 };
 
-// ✅ Exporta corretamente
+const rateMovie = async (req, res) => {
+  const { id } = req.params;
+  const { value } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "ID inválido." });
+  }
+
+  if (!value || value < 1 || value > 5) {
+    return res.status(400).json({ error: "Valor de avaliação inválido." });
+  }
+
+  try {
+    const movie = await Movie.findById(id);
+    if (!movie) return res.status(404).json({ error: "Filme não encontrado." });
+
+    const userId = req.user.id.toString();
+    movie.ratings = movie.ratings.filter((r) => r.userId !== userId);
+    movie.ratings.push({ userId, value });
+
+    await movie.save();
+    res.status(200).json(movie); 
+  } catch (err) {
+    console.error("Erro ao avaliar filme:", err);
+    res.status(500).json({ error: "Erro ao avaliar filme." });
+  }
+};
+
 module.exports = {
   getMovies,
-  getMovieById
+  getMovieById,
+  rateMovie,
 };

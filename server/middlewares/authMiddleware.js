@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // <-- importante para buscar o nome do utilizador
+const User = require('../models/User');
 
-const protect = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const auth = req.headers.authorization;
 
   if (!auth || !auth.startsWith('Bearer '))
@@ -14,11 +14,12 @@ const protect = async (req, res, next) => {
     const user = await User.findById(decoded.id).select('-password');
     if (!user) return res.status(401).json({ message: 'Utilizador inválido' });
 
-    req.user = user; // 👈 fica disponível como req.user._id e req.user.name
+    req.user = user;
     next();
   } catch (err) {
     res.status(401).json({ message: 'Token inválido' });
   }
 };
 
-module.exports = protect;
+module.exports = verifyToken;
+
