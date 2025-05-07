@@ -92,6 +92,7 @@ const Navbar = ({
         {user ? (
           <>
             <span>👋 Olá, {user.name}</span>
+            <Link to="/profile" className="auth-link">Perfil</Link>
             <button onClick={handleLogout} className="logout-button">
               Logout
             </button>

@@ -1,0 +1,13 @@
+/* src/styles/Profile.css */
+.profile-page {
+  padding: 2rem;
+  color: white;
+}
+
+.profile-info {
+  margin-top: 1rem;
+  background-color: #1e1e1e;
+  padding: 1rem;
+  border-radius: 8px;
+  line-height: 1.6;
+}

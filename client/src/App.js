@@ -6,13 +6,14 @@ import MovieList from "./pages/MovieList";
 import MovieDetail from "./pages/MovieDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import { AuthProvider } from "./components/AuthContext"; // <-- IMPORTANTE
+import Profile from "./pages/Profile";
+import { AuthProvider } from "./components/AuthContext";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [showFavorites, setShowFavorites] = useState(false);
-  const [logoutTrigger, setLogoutTrigger] = useState(false); // <- usado para atualizar favoritos
+  const [logoutTrigger, setLogoutTrigger] = useState(false);
 
   return (
     <AuthProvider>
@@ -28,6 +29,7 @@ function App() {
         />
 
         <Switch>
+          <Route path="/profile" component={Profile} />
           <Route
             path="/"
             exact

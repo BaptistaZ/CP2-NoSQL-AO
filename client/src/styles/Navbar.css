@@ -105,3 +105,14 @@
   color: white;
   font-size: 0.9rem;
 }
+
+.auth-link {
+  margin-left: 1rem;
+  color: white;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
