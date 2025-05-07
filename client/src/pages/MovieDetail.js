@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import api from "../services/api";
 import FavoriteButton from "../components/FavoriteButton";
+import MovieCard from "../components/MovieCard";
 import "../styles/MovieDetail.css";
 
 const MovieDetail = () => {
   const { id } = useParams();
   const history = useHistory();
+  const location = useLocation();
 
   const [movie, setMovie] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [user, setUser] = useState(null);
+  const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -37,6 +40,32 @@ const MovieDetail = () => {
 
     fetchMovie();
     fetchComments();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      if (!movie?.genres) return;
+      try {
+        const res = await api.get("/movies");
+        const allMovies = res.data.movies || [];
+
+        const filtered = allMovies.filter(
+          (m) =>
+            m._id !== movie._id &&
+            m.genres?.some((g) => movie.genres.includes(g))
+        );
+
+        setRecommendations(filtered.slice(0, 4));
+      } catch (err) {
+        console.error("Erro ao buscar recomendações:", err);
+      }
+    };
+
+    fetchRecommendations();
+  }, [movie]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
   const handleCommentSubmit = async (e) => {
@@ -66,8 +95,22 @@ const MovieDetail = () => {
 
   return (
     <div className="movie-detail">
-      {/* 🔙 Botão de Voltar */}
-      <button className="back-button" onClick={() => history.goBack()}>
+      <button
+        className="back-button"
+        onClick={() => {
+          const from = location.state?.from || "/";
+          const search = location.state?.searchQuery || "";
+          const genre = location.state?.selectedGenre || "";
+          const page = location.state?.currentPage || 1;
+
+          const queryParams = new URLSearchParams();
+          if (search) queryParams.set("search", search);
+          if (genre) queryParams.set("genre", genre);
+          if (page) queryParams.set("page", page);
+
+          history.push(`${from}?${queryParams.toString()}`);
+        }}
+      >
         ← Voltar
       </button>
 
@@ -78,6 +121,7 @@ const MovieDetail = () => {
         <div className="favorite-container">
           <FavoriteButton movieId={movie._id} />
         </div>
+
         <div className="genres">
           {movie.genres?.map((genre, index) => (
             <span key={index} className="genre-chip">
@@ -144,6 +188,17 @@ const MovieDetail = () => {
             </div>
           )}
         </div>
+
+        {recommendations.length > 0 && (
+          <div className="recommendations">
+            <h3>🍿 Poderás também gostar de...</h3>
+            <div className="recommendations-grid">
+              {recommendations.map((rec) => (
+                <MovieCard key={rec._id} movie={rec} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

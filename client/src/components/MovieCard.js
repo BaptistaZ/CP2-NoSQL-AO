@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 import Toast from "./Toast";
 import "../styles/MovieCard.css";
 
 const MovieCard = ({ movie }) => {
   const history = useHistory();
+  const location = useLocation();
   const { user } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -23,7 +24,20 @@ const MovieCard = ({ movie }) => {
   }, [movie._id, user]);
 
   const handleClick = () => {
-    history.push(`/movies/${movie._id}`);
+    const params = new URLSearchParams(location.search);
+    const searchQuery = params.get("search") || "";
+    const selectedGenre = params.get("genre") || "";
+    const currentPage = params.get("page") || 1;
+
+    history.push({
+      pathname: `/movies/${movie._id}`,
+      state: {
+        from: "/",
+        searchQuery,
+        selectedGenre,
+        currentPage,
+      },
+    });
   };
 
   const toggleFavorite = (e) => {
@@ -36,13 +50,9 @@ const MovieCard = ({ movie }) => {
 
     const key = `favorites_${user.id}`;
     const favs = JSON.parse(localStorage.getItem(key)) || [];
-    let updatedFavs;
-
-    if (favs.includes(movie._id)) {
-      updatedFavs = favs.filter((id) => id !== movie._id);
-    } else {
-      updatedFavs = [...favs, movie._id];
-    }
+    const updatedFavs = favs.includes(movie._id)
+      ? favs.filter((id) => id !== movie._id)
+      : [...favs, movie._id];
 
     localStorage.setItem(key, JSON.stringify(updatedFavs));
     setIsFavorite(updatedFavs.includes(movie._id));
@@ -54,7 +64,9 @@ const MovieCard = ({ movie }) => {
     <>
       <div className="movie-card" onClick={handleClick}>
         <img
-          src={movie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
+          src={
+            movie.poster || "https://via.placeholder.com/300x450?text=No+Image"
+          }
           alt={movie.title}
           className="movie-poster"
         />
