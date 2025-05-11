@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import "../styles/Navbar.css";
 import { AuthContext } from "./AuthContext";
 
@@ -16,6 +16,7 @@ const Navbar = ({
   const [genres, setGenres] = useState([]);
   const { user, logoutUser } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     setGenres([
@@ -61,46 +62,48 @@ const Navbar = ({
         🎬 MLFlix
       </Link>
 
-      <div className="navbar-controls">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-          disabled={showFavorites}
-        />
-        <select
-          value={selectedGenre}
-          onChange={(e) =>
-            setSelectedGenre(e.target.value === "all" ? "" : e.target.value)
-          }
-          className="genre-select"
-          disabled={showFavorites}
-        >
-          <option value="all">All Genres</option>
-          {genres.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
-        <button
-          className="clear-button"
-          onClick={handleClearFilters}
-          disabled={showFavorites}
-        >
-          Limpar Filtros
-        </button>
-        {user && (
-          <button
-            className="fav-toggle-button"
-            onClick={() => setShowFavorites(!showFavorites)}
+      {!location.pathname.startsWith("/movies/") && (
+        <div className="navbar-controls">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+            disabled={showFavorites}
+          />
+          <select
+            value={selectedGenre}
+            onChange={(e) =>
+              setSelectedGenre(e.target.value === "all" ? "" : e.target.value)
+            }
+            className="genre-select"
+            disabled={showFavorites}
           >
-            {showFavorites ? "Ver Todos" : "Ver Favoritos"}
+            <option value="all">All Genres</option>
+            {genres.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+          <button
+            className="clear-button"
+            onClick={handleClearFilters}
+            disabled={showFavorites}
+          >
+            Limpar Filtros
           </button>
-        )}
-      </div>
+          {user && (
+            <button
+              className="fav-toggle-button"
+              onClick={() => setShowFavorites(!showFavorites)}
+            >
+              {showFavorites ? "Ver Todos" : "Ver Favoritos"}
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="navbar-auth">
         {user ? (

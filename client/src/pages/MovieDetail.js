@@ -25,21 +25,25 @@ const MovieDetail = () => {
         setMovie(res.data);
         const ratings = res.data.ratings || [];
 
+        // Sempre lê o utilizador atual
+        const storedUserRaw = localStorage.getItem("user");
+        const parsedUser =
+          storedUserRaw && storedUserRaw !== "undefined"
+            ? JSON.parse(storedUserRaw)
+            : null;
+
+        setUser(parsedUser);
+        setUserRating(0); // reset sempre que muda
+
         if (ratings.length > 0) {
           const avg =
             ratings.reduce((sum, r) => sum + r.value, 0) / ratings.length;
           setAverageRating(avg.toFixed(1));
 
-          const storedUserRaw = localStorage.getItem("user");
-          const parsedUser =
-            storedUserRaw && storedUserRaw !== "undefined"
-              ? JSON.parse(storedUserRaw)
-              : null;
-
-          setUser(parsedUser);
-
-          const existing = ratings.find((r) => r.userId === parsedUser?.id);
-          if (existing) setUserRating(existing.value);
+          if (parsedUser) {
+            const existing = ratings.find((r) => r.userId === parsedUser.id);
+            if (existing) setUserRating(existing.value);
+          }
         }
       } catch (err) {
         console.error("Erro ao buscar detalhes:", err);
