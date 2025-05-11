@@ -29,15 +29,38 @@ const Login = () => {
     <>
       <div className="auth-overlay" />
       <div className="auth-container fixed-center">
-        <div className="auth-card">
-          <h2>Login</h2>
-          {error && <p className="error">{error}</p>}
-          <form onSubmit={handleSubmit}>
-            <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-            <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-            <button type="submit">Entrar</button>
-          </form>
-          <button className="back-button" onClick={() => history.push("/")}>← Voltar</button>
+        <div className="auth-wrapper">
+          <div className="auth-header">
+            <h1>🎬 Bem-vindo de volta à MLFlix</h1>
+            <p>
+              Entra para descobrires, comentares e avaliares os teus filmes
+              preferidos.
+            </p>
+          </div>
+          <div className="auth-card">
+            <h2>Login</h2>
+            {error && <p className="error">{error}</p>}
+            <form onSubmit={handleSubmit}>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                onChange={handleChange}
+                required
+              />
+              <button type="submit">Entrar</button>
+            </form>
+            <button className="back-button" onClick={() => history.push("/")}>
+              ← Voltar
+            </button>
+          </div>
         </div>
       </div>
     </>
