@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import api from "../services/api";
 import FavoriteButton from "../components/FavoriteButton";
-import MovieCard from "../components/MovieCard";
+
 import "../styles/MovieDetail.css";
 
 const MovieDetail = () => {
@@ -107,7 +107,7 @@ const MovieDetail = () => {
         { value },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setMovie(res.data); // atualiza com os dados já retornados
+      setMovie(res.data);
 
       const ratings = res.data.ratings || [];
       if (ratings.length > 0) {
@@ -264,7 +264,16 @@ const MovieDetail = () => {
             <h3>🍿 Poderás também gostar de...</h3>
             <div className="recommendations-grid">
               {recommendations.map((rec) => (
-                <MovieCard key={rec._id} movie={rec} />
+                <img
+                  key={rec._id}
+                  src={
+                    rec.poster ||
+                    "https://via.placeholder.com/300x450?text=No+Image"
+                  }
+                  alt={rec.title}
+                  className="movie-poster-recommendation"
+                  onClick={() => history.push(`/movies/${rec._id}`)}
+                />
               ))}
             </div>
           </div>

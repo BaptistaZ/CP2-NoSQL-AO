@@ -158,7 +158,6 @@
   color: #ff6666;
 }
 
-/* ✅ Horizontal layout com a tua classe personalizada */
 .recommendations-grid {
   display: flex;
   flex-wrap: nowrap;
@@ -167,9 +166,19 @@
   padding-bottom: 1rem;
 }
 
-.recommendations-grid .movie-card {
-  flex: 0 0 auto;
-  width: 250px;
+/* ✅ Nova classe para imagens simples como recomendações */
+.movie-poster-recommendation {
+  width: 180px;
+  height: 270px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.movie-poster-recommendation:hover {
+  transform: scale(1.05);
 }
 
 .rating-stars {
@@ -190,4 +199,3 @@
   transform: scale(1.2);
   transition: transform 0.2s;
 }
-

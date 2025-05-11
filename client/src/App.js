@@ -15,7 +15,9 @@ import { AuthProvider } from "./components/AuthContext";
 
 const AppContent = () => {
   const location = useLocation();
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage =
+    location.pathname === "/login" || location.pathname === "/register";
+  const isProfilePage = location.pathname === "/profile";
   const isDetailPage = location.pathname.startsWith("/movies/");
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,8 +27,8 @@ const AppContent = () => {
 
   return (
     <div className="app-container">
-      {/* Navbar sempre visível (ou esconde se quiseres em páginas de auth) */}
-      {!isAuthPage && (
+      {/* Esconde a Navbar em páginas de auth e perfil */}
+      {!isAuthPage && !isProfilePage && (
         <Navbar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -74,7 +76,6 @@ const AppContent = () => {
     </div>
   );
 };
-
 
 function App() {
   return (

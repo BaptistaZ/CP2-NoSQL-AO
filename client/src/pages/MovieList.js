@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import MovieCard from "../components/MovieCard";
 import api from "../services/api";
 import "../styles/MovieList.css";
 import LoadingSpinner from "../components/LoadingSpinner";
+
 
 const MovieList = ({
   searchQuery = "",
@@ -14,14 +14,11 @@ const MovieList = ({
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
-
   const limit = 10;
 
-  // Buscar filmes com filtros e paginação
   useEffect(() => {
     const fetchMovies = async () => {
       setLoading(true);
-
       try {
         if (showFavorites) {
           const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -30,10 +27,8 @@ const MovieList = ({
             setTotalPages(1);
             return;
           }
-
           const favKey = `favorites_${storedUser.id}`;
           const favIds = JSON.parse(localStorage.getItem(favKey)) || [];
-
           const promises = favIds.map((id) => api.get(`/movies/${id}`));
           const results = await Promise.all(promises);
           const favMovies = results.map((res) => res.data);
@@ -65,22 +60,26 @@ const MovieList = ({
     setCurrentPage(1);
   }, [searchQuery, selectedGenre]);
 
+  const handleImageError = (e) => {
+    e.target.src = "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+    e.target.style.objectFit = "contain";
+    e.target.style.backgroundColor = "#111";
+  };
+
   return (
     <div className="movie-list">
-
       {loading ? (
         <LoadingSpinner />
       ) : (
         <>
           {movies.length === 0 ? (
-            <p>Nenhum resultado encontrado.</p>
+            <p className="no-results">Nenhum resultado encontrado.</p>
           ) : (
             <>
               <div className="search-summary">
                 {searchQuery || selectedGenre ? (
                   <p>
-                    🔍 Resultados para:{" "}
-                    {searchQuery && <strong>"{searchQuery}"</strong>}
+                    🔍 Resultados para: {searchQuery && <strong>"{searchQuery}"</strong>}
                     {searchQuery && selectedGenre && " no género "}
                     {selectedGenre && <strong>{selectedGenre}</strong>}
                   </p>
@@ -94,17 +93,24 @@ const MovieList = ({
 
               <div className="movie-grid">
                 {movies.map((movie) => (
-                  <MovieCard key={movie._id} movie={movie} />
+                  <div
+                    key={movie._id}
+                    className="movie-card-image-only"
+                    onClick={() => (window.location.href = `/movies/${movie._id}`)}
+                  >
+                    <img
+                      src={movie.poster || "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"}
+                      alt={movie.title || "Filme sem título"}
+                      onError={handleImageError}
+                    />
+                  </div>
                 ))}
               </div>
 
               <div className="pagination">
                 {currentPage > 1 && (
-                  <button onClick={() => setCurrentPage(currentPage - 1)}>
-                    « Prev
-                  </button>
+                  <button onClick={() => setCurrentPage(currentPage - 1)}>« Prev</button>
                 )}
-
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                   .filter(
                     (page) =>
@@ -114,9 +120,7 @@ const MovieList = ({
                   )
                   .map((page, i, arr) => (
                     <React.Fragment key={page}>
-                      {i > 0 && page - arr[i - 1] > 1 && (
-                        <span className="dots">...</span>
-                      )}
+                      {i > 0 && page - arr[i - 1] > 1 && <span className="dots">...</span>}
                       <button
                         onClick={() => setCurrentPage(page)}
                         className={page === currentPage ? "active" : ""}
@@ -125,11 +129,8 @@ const MovieList = ({
                       </button>
                     </React.Fragment>
                   ))}
-
                 {currentPage < totalPages && (
-                  <button onClick={() => setCurrentPage(currentPage + 1)}>
-                    Next »
-                  </button>
+                  <button onClick={() => setCurrentPage(currentPage + 1)}>Next »</button>
                 )}
               </div>
             </>

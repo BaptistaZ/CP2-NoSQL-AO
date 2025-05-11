@@ -1,28 +1,100 @@
-/* src/styles/Profile.css */
 .profile-page {
-  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0f0f0f, #290040);
+  padding: 3rem 1rem;
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.profile-info {
-  margin-top: 1rem;
-  background-color: #1e1e1e;
-  padding: 1rem;
-  border-radius: 8px;
-  line-height: 1.6;
+.profile-container {
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
-.back-btn {
+.back-button {
+  display: inline-block;
+  margin-bottom: 1.5rem;
   background-color: transparent;
-  color: #00aaff;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-bottom: 1rem;
-  padding: 0.5rem 0;
-  text-align: left;
+  color: #a855f7;
+  border: 1px solid #a855f7;
+  border-radius: 10px;
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.back-btn:hover {
-  text-decoration: underline;
+.back-button:hover {
+  background-color: #a855f7;
+  color: #fff;
+}
+
+.profile-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #a855f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.profile-box {
+  background-color: rgba(20, 20, 20, 0.9);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  margin-bottom: 2rem;
+}
+
+.profile-box p {
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
+}
+
+.profile-box strong {
+  color: #d4d4d8;
+}
+
+.favorite-section {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.favorite-section h3 {
+  margin-bottom: 1.2rem;
+  font-size: 1.5rem;
+  color: #a855f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.favorites-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.favorites-grid img {
+  width: 180px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.favorites-grid img:hover {
+  transform: scale(1.05);
 }
