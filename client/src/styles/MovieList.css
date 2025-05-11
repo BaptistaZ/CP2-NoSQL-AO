@@ -13,14 +13,18 @@
 }
 
 .movie-card-image-only {
+  position: relative;
   width: 100%;
   max-width: 240px;
   height: 360px;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: hidden; /* Mantém o border-radius mas pode cortar a estrela */
   cursor: pointer;
   transition: transform 0.3s ease;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .movie-card-image-only:hover {
@@ -32,7 +36,32 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 12px; /* Garante que a imagem segue o mesmo raio */
 }
+
+/* botão estrela */
+.favorite-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  z-index: 5;
+  color: #ffcc00; /* amarelo ouro */
+  filter: drop-shadow(0 0 2px black); /* dá destaque */
+  transition: transform 0.2s ease;
+}
+
+.favorite-toggle:hover {
+  transform: scale(1.2);
+}
+
+.favorite-toggle.active {
+  color: gold;
+}
+
 
 .pagination {
   text-align: center;
@@ -108,3 +137,9 @@
   background: rgba(0, 0, 0, 0.6);
   padding: 0.3rem 0;
 }
+
+.favorites-grid {
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+

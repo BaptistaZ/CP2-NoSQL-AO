@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import "../styles/MovieList.css";
 import LoadingSpinner from "../components/LoadingSpinner";
-
+import { getFavorites, toggleFavorite } from "../services/favoritesService.js";
 
 const MovieList = ({
   searchQuery = "",
@@ -14,21 +14,21 @@ const MovieList = ({
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [favorites, setFavorites] = useState([]);
   const limit = 10;
 
   useEffect(() => {
     const fetchMovies = async () => {
       setLoading(true);
       try {
-        if (showFavorites) {
-          const storedUser = JSON.parse(localStorage.getItem("user"));
-          if (!storedUser) {
-            setMovies([]);
-            setTotalPages(1);
-            return;
-          }
-          const favKey = `favorites_${storedUser.id}`;
-          const favIds = JSON.parse(localStorage.getItem(favKey)) || [];
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+
+        if (storedUser) {
+          setFavorites(getFavorites(storedUser.id));
+        }
+
+        if (showFavorites && storedUser) {
+          const favIds = getFavorites(storedUser.id);
           const promises = favIds.map((id) => api.get(`/movies/${id}`));
           const results = await Promise.all(promises);
           const favMovies = results.map((res) => res.data);
@@ -61,9 +61,27 @@ const MovieList = ({
   }, [searchQuery, selectedGenre]);
 
   const handleImageError = (e) => {
-    e.target.src = "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+    e.target.src =
+      "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
     e.target.style.objectFit = "contain";
     e.target.style.backgroundColor = "#111";
+  };
+
+  const handleToggleFavorite = (movieId) => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!storedUser) {
+      alert("Tens de fazer login para adicionar aos favoritos.");
+      return;
+    }
+
+    const updated = toggleFavorite(storedUser.id, movieId);
+    setFavorites(updated);
+
+    if (showFavorites) {
+      setMovies((prevMovies) =>
+        prevMovies.filter((movie) => movie._id !== movieId)
+      );
+    }
   };
 
   return (
@@ -79,7 +97,8 @@ const MovieList = ({
               <div className="search-summary">
                 {searchQuery || selectedGenre ? (
                   <p>
-                    🔍 Resultados para: {searchQuery && <strong>"{searchQuery}"</strong>}
+                    🔍 Resultados para:{" "}
+                    {searchQuery && <strong>"{searchQuery}"</strong>}
                     {searchQuery && selectedGenre && " no género "}
                     {selectedGenre && <strong>{selectedGenre}</strong>}
                   </p>
@@ -91,25 +110,43 @@ const MovieList = ({
                 )}
               </div>
 
-              <div className="movie-grid">
+              <div
+                className={`movie-grid ${
+                  showFavorites ? "favorites-grid" : ""
+                }`}
+              >
                 {movies.map((movie) => (
-                  <div
-                    key={movie._id}
-                    className="movie-card-image-only"
-                    onClick={() => (window.location.href = `/movies/${movie._id}`)}
-                  >
+                  <div key={movie._id} className="movie-card-image-only">
                     <img
-                      src={movie.poster || "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"}
+                      src={
+                        movie.poster ||
+                        "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                      }
                       alt={movie.title || "Filme sem título"}
                       onError={handleImageError}
+                      onClick={() =>
+                        (window.location.href = `/movies/${movie._id}`)
+                      }
                     />
+                    <button
+                      className="favorite-toggle"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleFavorite(movie._id);
+                      }}
+                      title="Adicionar aos favoritos"
+                    >
+                      {favorites.includes(movie._id) ? "⭐" : "☆"}
+                    </button>
                   </div>
                 ))}
               </div>
 
               <div className="pagination">
                 {currentPage > 1 && (
-                  <button onClick={() => setCurrentPage(currentPage - 1)}>« Prev</button>
+                  <button onClick={() => setCurrentPage(currentPage - 1)}>
+                    « Prev
+                  </button>
                 )}
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                   .filter(
@@ -120,7 +157,9 @@ const MovieList = ({
                   )
                   .map((page, i, arr) => (
                     <React.Fragment key={page}>
-                      {i > 0 && page - arr[i - 1] > 1 && <span className="dots">...</span>}
+                      {i > 0 && page - arr[i - 1] > 1 && (
+                        <span className="dots">...</span>
+                      )}
                       <button
                         onClick={() => setCurrentPage(page)}
                         className={page === currentPage ? "active" : ""}
@@ -130,7 +169,9 @@ const MovieList = ({
                     </React.Fragment>
                   ))}
                 {currentPage < totalPages && (
-                  <button onClick={() => setCurrentPage(currentPage + 1)}>Next »</button>
+                  <button onClick={() => setCurrentPage(currentPage + 1)}>
+                    Next »
+                  </button>
                 )}
               </div>
             </>
