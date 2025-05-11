@@ -10,11 +10,12 @@ const Navbar = ({
   setSelectedGenre,
   showFavorites,
   setShowFavorites,
-  setLogoutTrigger, // NOVO
+  setLogoutTrigger,
 }) => {
   const history = useHistory();
   const [genres, setGenres] = useState([]);
   const { user, logoutUser } = useContext(AuthContext);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     setGenres([
@@ -36,10 +37,23 @@ const Navbar = ({
   };
 
   const handleLogout = () => {
-    logoutUser(); // já remove o token e o user
-    setLogoutTrigger((prev) => !prev); // força refresh
+    logoutUser();
+    setLogoutTrigger((prev) => !prev);
     history.push("/");
   };
+
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".user-dropdown")) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   return (
     <nav className="navbar">
@@ -90,13 +104,23 @@ const Navbar = ({
 
       <div className="navbar-auth">
         {user ? (
-          <>
-            <span>👋 Olá, {user.name}</span>
-            <Link to="/profile" className="auth-link">Perfil</Link>
-            <button onClick={handleLogout} className="logout-button">
-              Logout
-            </button>
-          </>
+          <div
+            className={showDropdown ? "user-dropdown open" : "user-dropdown"}
+            onClick={toggleDropdown}
+          >
+            <div className="user-info">
+              <span className="user-icon">👤</span>
+              <span className="user-name">{user.name}</span>
+            </div>
+            <div className="user-menu">
+              <Link to="/profile" className="dropdown-item">
+                Perfil
+              </Link>
+              <button onClick={handleLogout} className="dropdown-item logout">
+                Logout
+              </button>
+            </div>
+          </div>
         ) : (
           <>
             <Link to="/login" className="auth-link">
