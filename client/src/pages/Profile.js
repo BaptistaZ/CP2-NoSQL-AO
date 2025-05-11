@@ -27,7 +27,10 @@ const Profile = () => {
   useEffect(() => {
     const fetchFavorites = async () => {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      if (!storedUser) return;
+      if (!storedUser) {
+        setFavoriteMovies([]);
+        return;
+      }
 
       const favKey = `favorites_${storedUser.id}`;
       const favIds = JSON.parse(localStorage.getItem(favKey)) || [];
@@ -42,49 +45,56 @@ const Profile = () => {
     };
 
     fetchFavorites();
+
+    // ▶️ Atualiza quando o botão de favoritos emitir o evento
+    const handleFavoritesUpdated = () => fetchFavorites();
+    window.addEventListener("favoritesUpdated", handleFavoritesUpdated);
+
+    return () => {
+      window.removeEventListener("favoritesUpdated", handleFavoritesUpdated);
+    };
   }, []);
 
   if (!user) return <p className="loading-text">A carregar perfil...</p>;
 
   return (
     <div className="profile-page">
-      <div className="profile-container">
+      <div className="profile-card">
         <a href="/" className="back-button">
           ← Voltar
         </a>
-        <h2>👤 O meu Perfil</h2>
+        <h2 className="profile-title">👤 O meu Perfil</h2>
+
         <div className="profile-box">
           <p>
-            <strong>Nome:</strong> {user?.name}
+            <strong>👤 Nome:</strong> {user?.name}
           </p>
           <p>
-            <strong>Email:</strong> {user?.email}
+            <strong>✉️ Email:</strong> {user?.email}
           </p>
         </div>
-      </div>
 
-      {favoriteMovies.length > 0 && (
-        <div className="favorite-section">
-          <h3>🎞️ Filmes Favoritos</h3>
-          <div className="movie-grid">
-            {favoriteMovies.map((movie) => (
-              <div
-                key={movie._id}
-                className="movie-card-image-only"
-                onClick={() => (window.location.href = `/movies/${movie._id}`)}
-              >
+        {favoriteMovies.length > 0 && (
+          <div className="favorite-section">
+            <h3>🎞️ Filmes Favoritos</h3>
+            <div className="favorites-grid">
+              {favoriteMovies.map((movie) => (
                 <img
+                  key={movie._id}
                   src={
                     movie.poster ||
                     "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
                   }
                   alt={movie.title || "Filme sem título"}
+                  onClick={() =>
+                    (window.location.href = `/movies/${movie._id}`)
+                  }
                 />
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

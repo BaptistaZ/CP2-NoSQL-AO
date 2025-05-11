@@ -156,7 +156,10 @@ const MovieDetail = () => {
       <div className="movie-info-vertical">
         <h1 className="movie-title">{movie.title}</h1>
         <div className="favorite-container">
-          <FavoriteButton movieId={movie._id} />
+          <FavoriteButton
+            movieId={movie._id}
+            onToggle={() => window.location.reload()}
+          />
         </div>
 
         <div className="genres">
