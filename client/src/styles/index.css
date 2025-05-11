@@ -1,4 +1,4 @@
-/* index.css → manter apenas isto */
+/* Reset global e estilos base */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -6,10 +6,38 @@ body {
   color: #f0f0f0;
 }
 
+/* Títulos gerais */
 h1 {
   text-align: center;
   margin: 40px 0 20px;
   font-size: 2.5rem;
   font-weight: 600;
   color: #ffffff;
+}
+
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6); /* sombra suave */
+  z-index: 1000;
+  pointer-events: none; /* não bloqueia cliques */
+}
+
+
+.blurred {
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+/* Centralizar forms (caso Login/Register não usem container próprio) */
+.login-form,
+.register-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1100;
 }

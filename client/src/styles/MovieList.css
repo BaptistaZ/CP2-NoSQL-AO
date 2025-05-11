@@ -5,11 +5,12 @@
 }
 
 .movie-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2.2rem;
-  padding: 2rem 1rem;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+  padding: 1rem;
 }
 
 .pagination {
@@ -46,4 +47,25 @@
 .search-summary {
   margin-bottom: 1rem;
   font-size: 1.1rem;
+}
+
+.movies-header {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.movies-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.movies-header p {
+  color: #ccc;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
 }

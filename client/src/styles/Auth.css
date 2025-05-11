@@ -1,19 +1,26 @@
-.auth-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  padding: 2rem;
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.auth-container.fixed-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1100;
 }
 
 .auth-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.9);
   border-radius: 16px;
   padding: 2rem 3rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 400px;
   color: #fff;
@@ -40,10 +47,6 @@
   color: #fff;
 }
 
-.auth-card input::placeholder {
-  color: #ccc;
-}
-
 .auth-card button {
   padding: 0.8rem;
   background-color: #1e90ff;
@@ -51,13 +54,44 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.2s ease;
+  margin-top: 1rem;
 }
 
-.auth-card button:hover {
-  background-color: #1c78d2;
+.auth-card .back-button {
+  background-color: transparent;
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  border: 1px solid #444;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.auth-card .back-button:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.auth-card input::placeholder {
+  color: #ccc;
 }
 
 .auth-card .error {
   color: #ff6b6b;
+}
+
+.back-button {
+  margin-top: 1rem;
+  background: transparent;
+  color: #ffffffb0;
+  border: 1px solid #ffffff30;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 }

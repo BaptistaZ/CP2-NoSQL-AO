@@ -8,7 +8,7 @@ const MovieList = ({
   searchQuery = "",
   selectedGenre = "",
   showFavorites = "",
-  logoutTrigger = false, 
+  logoutTrigger = false,
 }) => {
   const [movies, setMovies] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -26,7 +26,7 @@ const MovieList = ({
         if (showFavorites) {
           const storedUser = JSON.parse(localStorage.getItem("user"));
           if (!storedUser) {
-            setMovies([]); 
+            setMovies([]);
             setTotalPages(1);
             return;
           }
@@ -59,7 +59,7 @@ const MovieList = ({
     };
 
     fetchMovies();
-  }, [currentPage, searchQuery, selectedGenre, showFavorites, logoutTrigger]); 
+  }, [currentPage, searchQuery, selectedGenre, showFavorites, logoutTrigger]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -67,7 +67,6 @@ const MovieList = ({
 
   return (
     <div className="movie-list">
-      <h2>Movies</h2>
 
       {loading ? (
         <LoadingSpinner />
@@ -86,7 +85,10 @@ const MovieList = ({
                     {selectedGenre && <strong>{selectedGenre}</strong>}
                   </p>
                 ) : (
-                  <p>🎬 A mostrar todos os filmes</p>
+                  <div className="movies-header">
+                    <h2>🎬 Movies</h2>
+                    <p>A mostrar todos os filmes</p>
+                  </div>
                 )}
               </div>
 
