@@ -24,13 +24,21 @@ const MovieDetail = () => {
         const res = await api.get(`/movies/${id}`);
         setMovie(res.data);
         const ratings = res.data.ratings || [];
+
         if (ratings.length > 0) {
           const avg =
             ratings.reduce((sum, r) => sum + r.value, 0) / ratings.length;
           setAverageRating(avg.toFixed(1));
 
-          const storedUser = JSON.parse(localStorage.getItem("user"));
-          const existing = ratings.find((r) => r.userId === storedUser?.id);
+          const storedUserRaw = localStorage.getItem("user");
+          const parsedUser =
+            storedUserRaw && storedUserRaw !== "undefined"
+              ? JSON.parse(storedUserRaw)
+              : null;
+
+          setUser(parsedUser);
+
+          const existing = ratings.find((r) => r.userId === parsedUser?.id);
           if (existing) setUserRating(existing.value);
         }
       } catch (err) {
@@ -46,9 +54,6 @@ const MovieDetail = () => {
         console.error("Erro ao buscar comentários:", err);
       }
     };
-
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
 
     fetchMovie();
     fetchComments();
@@ -115,8 +120,17 @@ const MovieDetail = () => {
           ratings.reduce((sum, r) => sum + r.value, 0) / ratings.length;
         setAverageRating(avg.toFixed(1));
 
-        const storedUser = JSON.parse(localStorage.getItem("user"));
+        let storedUser = null;
+        try {
+          const rawUser = localStorage.getItem("user");
+          storedUser =
+            rawUser && rawUser !== "undefined" ? JSON.parse(rawUser) : null;
+        } catch (err) {
+          console.error("Erro ao ler utilizador no submitRating:", err);
+        }
+
         const existing = ratings.find((r) => r.userId === storedUser?.id);
+
         if (existing) setUserRating(existing.value);
       }
     } catch (err) {
