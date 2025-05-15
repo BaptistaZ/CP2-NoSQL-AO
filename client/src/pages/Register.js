@@ -19,7 +19,7 @@ const Register = () => {
       await api.post("/auth/register", form);
       history.push("/login");
     } catch (err) {
-      setError(err.response?.data?.message || "Erro no registo");
+      setError(err.response?.data?.message || "Error in registration");
     }
   };
 
@@ -29,21 +29,21 @@ const Register = () => {
       <div className="auth-container fixed-center">
         <div className="auth-wrapper">
           <div className="auth-header">
-            <h1>🍿 Junta-te ao MLFlix</h1>
+            <h1>🍿 Join MLFlix</h1>
             <p>
-              Cria a tua conta e mergulha no universo do cinema com milhares de
-              títulos.
+              Create your account and dive into the world of cinema with thousands of
+              titles.
             </p>
           </div>
           <div className="auth-card">
-            <h2>Registar</h2>
+            <h2>Register</h2>
             {error && <p className="error">{error}</p>}
 
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="name"
-                placeholder="Nome"
+                placeholder="Name"
                 onChange={handleChange}
                 required
               />
@@ -61,11 +61,11 @@ const Register = () => {
                 onChange={handleChange}
                 required
               />
-              <button type="submit">Criar Conta</button>
+              <button type="submit">Create Account</button>
             </form>
 
             <button className="back-button" onClick={() => history.push("/")}>
-              ← Voltar
+              ← Go Back
             </button>
           </div>
         </div>

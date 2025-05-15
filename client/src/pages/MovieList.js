@@ -47,7 +47,7 @@ const MovieList = ({
           setTotalPages(res.data.totalPages);
         }
       } catch (err) {
-        console.error("Erro ao buscar filmes:", err);
+        console.error("Error searching for movies:", err);
       } finally {
         setLoading(false);
       }
@@ -70,7 +70,7 @@ const MovieList = ({
   const handleToggleFavorite = (movieId) => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (!storedUser) {
-      alert("Tens de fazer login para adicionar aos favoritos.");
+      alert("You have to log in to add to favorites.");
       return;
     }
 
@@ -91,21 +91,21 @@ const MovieList = ({
       ) : (
         <>
           {movies.length === 0 ? (
-            <p className="no-results">Nenhum resultado encontrado.</p>
+            <p className="no-results">No results found.</p>
           ) : (
             <>
               <div className="search-summary">
                 {searchQuery || selectedGenre ? (
                   <p>
-                    🔍 Resultados para:{" "}
+                    🔍 Results for:{" "}
                     {searchQuery && <strong>"{searchQuery}"</strong>}
-                    {searchQuery && selectedGenre && " no género "}
+                    {searchQuery && selectedGenre && " in the genre "}
                     {selectedGenre && <strong>{selectedGenre}</strong>}
                   </p>
                 ) : (
                   <div className="movies-header">
                     <h2>🎬 Movies</h2>
-                    <p>A mostrar todos os filmes</p>
+                    <p>Showing all movies</p>
                   </div>
                 )}
               </div>
@@ -122,7 +122,7 @@ const MovieList = ({
                         movie.poster ||
                         "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
                       }
-                      alt={movie.title || "Filme sem título"}
+                      alt={movie.title || "Untitled Movie"}
                       onError={handleImageError}
                       onClick={() =>
                         (window.location.href = `/movies/${movie._id}`)
@@ -134,7 +134,7 @@ const MovieList = ({
                         e.stopPropagation();
                         handleToggleFavorite(movie._id);
                       }}
-                      title="Adicionar aos favoritos"
+                      title="Add to favorites"
                     >
                       {favorites.includes(movie._id) ? "⭐" : "☆"}
                     </button>

@@ -24,7 +24,7 @@ const getMovies = async (req, res) => {
       movies,
     });
   } catch (error) {
-    console.error("Erro no getMovies:", error);
+    console.error("Error in getMovies:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -34,7 +34,7 @@ const getMovieById = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "ID inválido" });
+      return res.status(400).json({ message: "Invalid ID" });
     }
 
     const movie = await Movie.findById(id);
@@ -48,7 +48,7 @@ const getMovieById = async (req, res) => {
 
     res.json({ ...movie.toObject(), comments });
   } catch (error) {
-    console.error("Erro no getMovieById:", error);
+    console.error("Error in getMovieById:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -58,16 +58,16 @@ const rateMovie = async (req, res) => {
   const { value } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: "ID inválido." });
+    return res.status(400).json({ error: "Invalid ID." });
   }
 
   if (!value || value < 1 || value > 5) {
-    return res.status(400).json({ error: "Valor de avaliação inválido." });
+    return res.status(400).json({ error: "Invalid assessment value." });
   }
 
   try {
     const movie = await Movie.findById(id);
-    if (!movie) return res.status(404).json({ error: "Filme não encontrado." });
+    if (!movie) return res.status(404).json({ error: "Movie not found." });
 
     const userId = req.user.id.toString();
     movie.ratings = movie.ratings.filter((r) => r.userId !== userId);
@@ -76,8 +76,8 @@ const rateMovie = async (req, res) => {
     await movie.save();
     res.status(200).json(movie); 
   } catch (err) {
-    console.error("Erro ao avaliar filme:", err);
-    res.status(500).json({ error: "Erro ao avaliar filme." });
+    console.error("Error rating movie:", err);
+    res.status(500).json({ error: "Error rating movie." });
   }
 };
 

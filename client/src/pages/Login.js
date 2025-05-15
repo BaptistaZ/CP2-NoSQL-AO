@@ -31,10 +31,10 @@ const Login = () => {
       <div className="auth-container fixed-center">
         <div className="auth-wrapper">
           <div className="auth-header">
-            <h1>🎬 Bem-vindo de volta à MLFlix</h1>
+            <h1>🎬 Welcome back to MLFlix</h1>
             <p>
-              Entra para descobrires, comentares e avaliares os teus filmes
-              preferidos.
+              Log in to discover, comment on and rate your favorite
+              movies.
             </p>
           </div>
           <div className="auth-card">
@@ -55,10 +55,10 @@ const Login = () => {
                 onChange={handleChange}
                 required
               />
-              <button type="submit">Entrar</button>
+              <button type="submit">Login Account</button>
             </form>
             <button className="back-button" onClick={() => history.push("/")}>
-              ← Voltar
+              ← Go Back
             </button>
           </div>
         </div>

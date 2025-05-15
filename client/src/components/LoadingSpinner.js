@@ -5,7 +5,7 @@ const LoadingSpinner = () => {
   return (
     <div className="spinner-container">
       <div className="loading-spinner"></div>
-      <p>A carregar filmes...</p>
+      <p>Loading Movies...</p>
     </div>
   );
 };

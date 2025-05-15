@@ -77,7 +77,7 @@ const MovieDetail = () => {
 
         setRecommendations(filtered.slice(0, 4));
       } catch (err) {
-        console.error("Erro ao buscar recomendações:", err);
+        console.error("Error fetching recommendations:", err);
       }
     };
 
@@ -103,7 +103,7 @@ const MovieDetail = () => {
       const res = await api.get(`/comments/${id}`);
       setComments(res.data);
     } catch (err) {
-      alert("Erro ao enviar comentário. Faz login novamente.");
+      alert("Error sending comment. Please log in again.");
     }
   };
 
@@ -129,7 +129,7 @@ const MovieDetail = () => {
           storedUser =
             rawUser && rawUser !== "undefined" ? JSON.parse(rawUser) : null;
         } catch (err) {
-          console.error("Erro ao ler utilizador no submitRating:", err);
+          console.error("Error reading user in submitRating:", err);
         }
 
         const existing = ratings.find((r) => r.userId === storedUser?.id);
@@ -137,12 +137,12 @@ const MovieDetail = () => {
         if (existing) setUserRating(existing.value);
       }
     } catch (err) {
-      alert("Erro ao avaliar. Faz login novamente.");
+      alert("Error evaluating. Please log in again.");
     }
   };
 
   if (!movie)
-    return <p className="loading-text">A carregar detalhes do filme...</p>;
+    return <p className="loading-text">Loading movie details...</p>;
 
   const posterUrl =
     movie.poster || "https://via.placeholder.com/300x450?text=No+Image";
@@ -165,7 +165,7 @@ const MovieDetail = () => {
           history.push(`${from}?${queryParams.toString()}`);
         }}
       >
-        ← Voltar
+        ← Go Back
       </button>
 
       <img src={posterUrl} alt={movie.title} className="movie-poster-top" />
@@ -191,28 +191,28 @@ const MovieDetail = () => {
           <p>
             <strong>⭐ IMDB:</strong> {movie.imdb?.rating || "N/A"}/10
             &nbsp;|&nbsp;
-            <strong>🗳️</strong> {movie.imdb?.votes || 0} votos
+            <strong>🗳️</strong> {movie.imdb?.votes || 0} Votes
           </p>
           <p>
-            <strong>⏱️ Duração:</strong> {movie.runtime || "N/A"} minutos
+            <strong>⏱️ Duration:</strong> {movie.runtime || "N/A"} minutes
           </p>
         </div>
 
         <div className="movie-cast">
-          <h3>🎭 Elenco</h3>
-          <p>{movie.cast?.join(", ") || "Sem informação"}</p>
+          <h3>🎭 Cast</h3>
+          <p>{movie.cast?.join(", ") || "No information"}</p>
         </div>
 
         <div className="movie-plot">
-          <h3>📖 Sinopse</h3>
-          <p>{movie.plot || "Sem sinopse disponível."}</p>
+          <h3>📖 Synopsis</h3>
+          <p>{movie.plot || "No synopsis available."}</p>
         </div>
         <div className="movie-rating">
-          <h3>🗳️ Avaliação</h3>
+          <h3>🗳️ Assessment</h3>
           <p>
             {averageRating
-              ? `Média: ${averageRating}/5 (${movie.ratings.length} avaliações)`
-              : "Ainda não foi avaliado."}
+              ? `Average: ${averageRating}/5 (${movie.ratings.length} reviews)`
+              : "Not yet rated."}
           </p>
           {user ? (
             <div className="rating-stars">
@@ -228,13 +228,13 @@ const MovieDetail = () => {
             </div>
           ) : (
             <p className="comment-login-prompt">
-              🔒 Para avaliar,{" "}
+              🔒 To evaluate,{" "}
               <span onClick={() => history.push("/login")} className="link">
-                efetua login
+                log in
               </span>{" "}
-              ou{" "}
+              or{" "}
               <span onClick={() => history.push("/register")} className="link">
-                regista-te
+                register
               </span>
               .
             </p>
@@ -242,8 +242,8 @@ const MovieDetail = () => {
         </div>
 
         <div className="movie-comments">
-          <h3>💬 Comentários</h3>
-          {comments.length === 0 && <p>Ainda não há comentários.</p>}
+          <h3>💬 Comments</h3>
+          {comments.length === 0 && <p>No comments yet.</p>}
           {comments.map((comment) => (
             <div key={comment._id} className="comment">
               <strong>{comment.userName}</strong>: {comment.text}
@@ -253,25 +253,25 @@ const MovieDetail = () => {
           {user ? (
             <form onSubmit={handleCommentSubmit} className="comment-form">
               <textarea
-                placeholder="Escreve um comentário..."
+                placeholder="Write a comment..."
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
-              <button type="submit">Comentar</button>
+              <button type="submit">Comment</button>
             </form>
           ) : (
             <div className="comment-login-prompt">
               <p>
-                🔒 Para comentar,{" "}
+                🔒 To comment,{" "}
                 <span onClick={() => history.push("/login")} className="link">
-                  efetua login
+                  log in
                 </span>{" "}
-                ou{" "}
+                or{" "}
                 <span
                   onClick={() => history.push("/register")}
                   className="link"
                 >
-                  regista-te
+                  register
                 </span>
                 .
               </p>
@@ -281,7 +281,7 @@ const MovieDetail = () => {
 
         {recommendations.length > 0 && (
           <div className="recommendations">
-            <h3>🍿 Poderás também gostar de...</h3>
+            <h3>🍿 You may also like...</h3>
             <div className="recommendations-grid">
               {recommendations.map((rec) => (
                 <img

@@ -10,14 +10,14 @@ router.get("/:movieId", async (req, res) => {
     });
     res.json(comments);
   } catch (err) {
-    res.status(500).json({ message: "Erro ao buscar comentários" });
+    res.status(500).json({ message: "Error fetching comments" });
   }
 });
 
 router.post("/", verifyToken, async (req, res) => {
   const { movieId, text } = req.body;
 
-  if (!text) return res.status(400).json({ message: "Comentário vazio!" });
+  if (!text) return res.status(400).json({ message: "Empty comment!" });
 
   try {
     const newComment = new Comment({
@@ -30,7 +30,7 @@ router.post("/", verifyToken, async (req, res) => {
     await newComment.save();
     res.status(201).json(newComment);
   } catch (err) {
-    res.status(500).json({ message: "Erro ao criar comentário" });
+    res.status(500).json({ message: "Error creating comment" });
   }
 });
 

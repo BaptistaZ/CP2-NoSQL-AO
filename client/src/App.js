@@ -27,7 +27,6 @@ const AppContent = () => {
 
   return (
     <div className="app-container">
-      {/* Esconde a Navbar em páginas de auth e perfil */}
       {!isAuthPage && !isProfilePage && (
         <Navbar
           searchQuery={searchQuery}
@@ -40,7 +39,6 @@ const AppContent = () => {
         />
       )}
 
-      {/* Página de detalhes isolada */}
       {isDetailPage ? (
         <Switch>
           <Route path="/movies/:id" component={MovieDetail} />

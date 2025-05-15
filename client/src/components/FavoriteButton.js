@@ -51,7 +51,7 @@ const FavoriteButton = ({ movieId, onToggle }) => {
       </button>
       {showWarning && (
         <span className="favorite-warning">
-          ⚠️ Tens de fazer login para adicionar aos favoritos!
+          ⚠️ You have to log in to add to favorites!
         </span>
       )}
     </div>

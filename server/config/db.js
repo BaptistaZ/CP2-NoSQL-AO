@@ -9,9 +9,9 @@ const connectDB = async () => {
       dbName: 'sample_mflix'
     });
 
-    console.log('✅ MongoDB conectado com sucesso!');
+    console.log('✅ MongoDB connected successfully!');
   } catch (error) {
-    console.error('❌ Erro ao conectar ao MongoDB:', error.message);
+    console.error('❌ Error connecting to MongoDB:', error.message);
     process.exit(1); 
   }
 };

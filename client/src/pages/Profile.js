@@ -17,7 +17,7 @@ const Profile = () => {
         });
         setUser(res.data);
       } catch (err) {
-        console.error("Erro ao carregar perfil:", err);
+        console.error("Error loading profile:", err);
       }
     };
 
@@ -40,7 +40,7 @@ const Profile = () => {
         const results = await Promise.all(promises);
         setFavoriteMovies(results.map((res) => res.data));
       } catch (err) {
-        console.error("Erro ao buscar filmes favoritos:", err);
+        console.error("Error searching for favorite movies:", err);
       }
     };
 
@@ -54,19 +54,19 @@ const Profile = () => {
     };
   }, []);
 
-  if (!user) return <p className="loading-text">A carregar perfil...</p>;
+  if (!user) return <p className="loading-text">Loading profile...</p>;
 
   return (
     <div className="profile-page">
       <div className="profile-card">
         <a href="/" className="back-button">
-          ← Voltar
+          ← Go Back
         </a>
-        <h2 className="profile-title">👤 O meu Perfil</h2>
+        <h2 className="profile-title">👤 My Profile</h2>
 
         <div className="profile-box">
           <p>
-            <strong>👤 Nome:</strong> {user?.name}
+            <strong>👤 Name:</strong> {user?.name}
           </p>
           <p>
             <strong>✉️ Email:</strong> {user?.email}
@@ -75,7 +75,7 @@ const Profile = () => {
 
         {favoriteMovies.length > 0 && (
           <div className="favorite-section">
-            <h3>🎞️ Filmes Favoritos</h3>
+            <h3>🎞️ Favorite Movies</h3>
             <div className="favorites-grid">
               {favoriteMovies.map((movie) => (
                 <img
@@ -84,7 +84,7 @@ const Profile = () => {
                     movie.poster ||
                     "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
                   }
-                  alt={movie.title || "Filme sem título"}
+                  alt={movie.title || "Untitled Movie"}
                   onClick={() =>
                     (window.location.href = `/movies/${movie._id}`)
                   }

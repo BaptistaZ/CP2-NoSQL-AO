@@ -92,14 +92,14 @@ const Navbar = ({
             onClick={handleClearFilters}
             disabled={showFavorites}
           >
-            Limpar Filtros
+            Clear Filters
           </button>
           {user && (
             <button
               className="fav-toggle-button"
               onClick={() => setShowFavorites(!showFavorites)}
             >
-              {showFavorites ? "Ver Todos" : "Ver Favoritos"}
+              {showFavorites ? "See All" : "View Favorites"}
             </button>
           )}
         </div>
@@ -117,7 +117,7 @@ const Navbar = ({
             </div>
             <div className="user-menu">
               <Link to="/profile" className="dropdown-item">
-                Perfil
+                Profile
               </Link>
               <button onClick={handleLogout} className="dropdown-item logout">
                 Logout
@@ -130,7 +130,7 @@ const Navbar = ({
               Login
             </Link>
             <Link to="/register" className="auth-link">
-              Registar
+              Register
             </Link>
           </>
         )}

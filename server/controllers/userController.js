@@ -6,7 +6,7 @@ exports.getFavorites = async (req, res) => {
     const user = await User.findById(req.user.id).populate('favorites');
     res.json(user.favorites);
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao obter favoritos' });
+    res.status(500).json({ message: 'Error getting favorites' });
   }
 };
 
@@ -36,6 +36,6 @@ exports.getProfile = async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
     res.json(user);
   } catch (err) {
-    res.status(500).json({ message: "Erro ao obter perfil" });
+    res.status(500).json({ message: "Error getting profile" });
   }
 };
