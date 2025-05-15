@@ -46,7 +46,6 @@ const Profile = () => {
 
     fetchFavorites();
 
-    // ▶️ Atualiza quando o botão de favoritos emitir o evento
     const handleFavoritesUpdated = () => fetchFavorites();
     window.addEventListener("favoritesUpdated", handleFavoritesUpdated);
 

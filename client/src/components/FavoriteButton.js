@@ -38,7 +38,7 @@ const FavoriteButton = ({ movieId, onToggle }) => {
     localStorage.setItem(key, JSON.stringify(updatedFavs));
     setIsFavorite(updatedFavs.includes(movieId));
 
-    if (onToggle) onToggle(); // Notifica o componente pai para recarregar se necessário
+    if (onToggle) onToggle(); 
   };
 
   return (

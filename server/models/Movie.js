@@ -1,4 +1,3 @@
-// models/Movie.js
 const mongoose = require('mongoose');
 
 const ratingSchema = new mongoose.Schema({
@@ -15,7 +14,6 @@ const ratingSchema = new mongoose.Schema({
 });
 
 const movieSchema = new mongoose.Schema({
-  // outros campos podem continuar livres
   title: String,
   poster: String,
   year: String,

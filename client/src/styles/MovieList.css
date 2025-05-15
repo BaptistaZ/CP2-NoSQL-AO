@@ -18,7 +18,7 @@
   max-width: 240px;
   height: 360px;
   border-radius: 12px;
-  overflow: hidden; /* Mantém o border-radius mas pode cortar a estrela */
+  overflow: hidden; 
   cursor: pointer;
   transition: transform 0.3s ease;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
@@ -36,10 +36,9 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 12px; /* Garante que a imagem segue o mesmo raio */
+  border-radius: 12px; 
 }
 
-/* botão estrela */
 .favorite-toggle {
   position: absolute;
   top: 8px;
@@ -49,8 +48,8 @@
   font-size: 1.6rem;
   cursor: pointer;
   z-index: 5;
-  color: #ffcc00; /* amarelo ouro */
-  filter: drop-shadow(0 0 2px black); /* dá destaque */
+  color: #ffcc00; 
+  filter: drop-shadow(0 0 2px black); 
   transition: transform 0.2s ease;
 }
 

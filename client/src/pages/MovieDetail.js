@@ -25,7 +25,6 @@ const MovieDetail = () => {
         setMovie(res.data);
         const ratings = res.data.ratings || [];
 
-        // Sempre lê o utilizador atual
         const storedUserRaw = localStorage.getItem("user");
         const parsedUser =
           storedUserRaw && storedUserRaw !== "undefined"
@@ -33,7 +32,7 @@ const MovieDetail = () => {
             : null;
 
         setUser(parsedUser);
-        setUserRating(0); // reset sempre que muda
+        setUserRating(0); 
 
         if (ratings.length > 0) {
           const avg =
