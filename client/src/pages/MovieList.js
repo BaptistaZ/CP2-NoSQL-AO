@@ -3,6 +3,7 @@ import api from "../services/api";
 import "../styles/MovieList.css";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { getFavorites, toggleFavorite } from "../services/favoritesService.js";
+import { useHistory } from "react-router-dom";
 
 const MovieList = ({
   searchQuery = "",
@@ -16,6 +17,7 @@ const MovieList = ({
   const [loading, setLoading] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const limit = 10;
+  const history = useHistory();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -124,9 +126,7 @@ const MovieList = ({
                       }
                       alt={movie.title || "Untitled Movie"}
                       onError={handleImageError}
-                      onClick={() =>
-                        (window.location.href = `/movies/${movie._id}`)
-                      }
+                      onClick={() => history.push(`/movies/${movie._id}`)}
                     />
                     <button
                       className="favorite-toggle"
